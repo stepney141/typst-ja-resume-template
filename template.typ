@@ -116,7 +116,7 @@
   )
 }
 
-#let アドレス(住所ふりがな1: "", 住所1: "",住所ふりがな2: "", 住所2: "",郵便番号1: "",郵便番号2: "", 電話番号1:"",Email1:"",電話番号2:"",Email2:"") = {
+#let アドレス(住所ふりがな1: "", 住所1: "",住所ふりがな2: "", 住所2: "",郵便番号1: "",郵便番号2: "", 電話番号1:"",Email1:"",電話番号2:"",Email2:"", enable2ndAddress: true) = {
   stack(
     grid(
       columns: (5fr,2fr),
@@ -160,7 +160,7 @@
           width: 100%,
           height: 1.8cm,
           stroke: (
-            bottom: 0.5pt,
+            bottom: if enable2ndAddress { 0.5pt } else { 1.5pt },
             top: none,
             left: 1.5pt,
             right: 0.5pt
@@ -179,7 +179,7 @@
           width: 100%,
           height: 1.8cm,
           stroke: (
-            bottom: 0.5pt,
+            bottom: if enable2ndAddress { 0.5pt } else { 1.5pt },
             top: none,
             left: none,
             right: 1.5pt
@@ -190,78 +190,82 @@
         )
       ]
     ),
-    grid(
-      columns: (5fr,2fr),
-      [
-        #stack(
-          rect(
+    if enable2ndAddress {
+      grid(
+        columns: (5fr,2fr),
+        [
+          #stack(
+            rect(
+              stroke: (
+                bottom: none,
+                top: none,
+                left: 1.5pt,
+                right: 0.5pt
+              ),[
+                #grid(
+                  columns: (1.5cm,1fr),
+                  [ふりがな],
+                  [#align(center,住所ふりがな2)]
+                )
+              ]
+            ),
+            line(stroke: (dash:"dashed"), length: 100%)
+          )
+        ],
+        [
+          #rect(
+            width: 100%,
             stroke: (
-              bottom: none,
+              bottom: 0.5pt,
+              top: none,
+              left: none,
+              right: 1.5pt
+            ),[
+              電話 #h(10pt) #電話番号2
+            ]
+          )
+        ]
+      )
+    },
+    if enable2ndAddress {
+      grid(
+        columns: (5fr,2fr),
+        [
+          #rect(
+            width: 100%,
+            height: 1.8cm,
+            stroke: (
+              bottom: 1.5pt,
               top: none,
               left: 1.5pt,
               right: 0.5pt
             ),[
-              #grid(
-                columns: (1.5cm,1fr),
-                [ふりがな],
-                [#align(center,住所ふりがな2)]
-              )
+              #if (郵便番号2 == "") {
+                [連絡先 (〒 #h(20pt) - #h(20pt))]
+              } else {
+                [連絡先 (〒 #text(tracking: 1pt,systemFontSize,郵便番号2))]
+              }
+              #pad(y: 0.2cm ,align(center,text(inputFontSize,住所2)))
             ]
-          ),
-          line(stroke: (dash:"dashed"), length: 100%)
-        )
-      ],
-      [
-        #rect(
-          width: 100%,
-          stroke: (
-            bottom: 0.5pt,
-            top: none,
-            left: none,
-            right: 1.5pt
-          ),[
-          電話 #h(10pt) #電話番号2
-          ]
-        )
-      ]
-    ),
-    grid(
-      columns: (5fr,2fr),
-      [
-        #rect(
-          width: 100%,
-          height: 1.8cm,
-          stroke: (
-            bottom: 1.5pt,
-            top: none,
-            left: 1.5pt,
-            right: 0.5pt
-          ),[
-           #if (郵便番号2 == "") {
-              [連絡先 (〒 #h(20pt) - #h(20pt))]
-            } else {
-              [連絡先 (〒 #text(tracking: 1pt,systemFontSize,郵便番号2))]
-            }
-            #pad(y: 0.2cm ,align(center,text(inputFontSize,住所2)))
-          ]
-        )
-      ],
-      [
-        #rect(
-          width: 100%,
-          height: 1.8cm,
-          stroke: (
-            bottom: 1.5pt,
-            top: none,
-            left: none,
-            right: 1.5pt
-          ),[
-            E-mail
-            #pad(y: 0.3cm ,align(center,Email2))
-          ]
-        )
-      ]
-    )
+          )
+        ],
+        [
+          #rect(
+            width: 100%,
+            height: 1.8cm,
+            stroke: (
+              bottom: 1.5pt,
+              top: none,
+              left: none,
+              right: 1.5pt
+            ),[
+              E-mail
+              #pad(y: 0.3cm ,align(center,Email2))
+            ]
+          )
+        ]
+      )
+    }
   )
 }
 
@@ -321,7 +325,7 @@
   )
 }
 
-#let　以上() = {
+#let 以上() = {
   set text(inputFontSize)
   grid(
     columns: (1.5cm,0.8cm,1fr),
@@ -419,7 +423,7 @@
   )
 }
 
-#let 志望動機(children) = {
+#let 志望動機(height: 5cm, children) = {
   stack(
     rect(
       stroke: (
@@ -428,10 +432,10 @@
         left: 1.5pt,
         right: 1.5pt
       ),
-      height: 5cm,
+      height: height,
       width: 100%,
       [
-        志望の動機、特技、好きな学科、アピールポイントなど
+        志望の動機、特技、自己PR、アピールポイントなど
         #linebreak()
         #set text(inputFontSize)
         #children
@@ -440,7 +444,7 @@
   )
 }
 
-#let 本人希望(children) = {
+#let 本人希望(height: 5cm, children) = {
   stack(
     rect(
       stroke: (
@@ -449,7 +453,7 @@
         left: 1.5pt,
         right: 1.5pt
       ),
-      height: 5cm,
+      height: height,
       width: 100%,
       [
         本人希望記入欄(特に給料・職種・勤務時間・勤務地・その他についての希望があれば記入)
