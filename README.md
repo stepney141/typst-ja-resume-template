@@ -1,5 +1,5 @@
 # Typst履歴書テンプレート (自己流)
-![PDF](https://img.shields.io/badge/Resume-PDF-blue)
+[![Build Typst document](https://github.com/stepney141/typst-ja-resume-template/actions/workflows/build.yaml/badge.svg)](https://github.com/stepney141/typst-ja-resume-template/actions/workflows/build.yaml)
 
 ## これは何？
 
