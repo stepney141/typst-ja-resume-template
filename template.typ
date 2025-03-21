@@ -1,5 +1,5 @@
 #let systemFontSize = 8pt
-#let nameFontSize = 16pt
+#let nameFontSize = 17pt
 #let inputFontSize = 10pt
 
 #let addSpace(input) = {
@@ -185,7 +185,12 @@
             right: 1.5pt
           ),[
             E-mail
-            #pad(y: 0.3cm ,align(center,Email1))
+            #pad(
+              y: 0.3cm,
+              align(center, text(size: inputFontSize)[
+                #Email1
+              ])
+            )
           ]
         )
       ]
@@ -423,7 +428,7 @@
   )
 }
 
-#let 志望動機(height: 5cm, children) = {
+#let 自由記述欄(description: "", height: 5cm, children) = {
   stack(
     rect(
       stroke: (
@@ -435,8 +440,9 @@
       height: height,
       width: 100%,
       [
-        志望の動機、特技、自己PR、アピールポイントなど
+        #description
         #linebreak()
+        #set par(justify: true, leading: 0.65em, spacing: 0.7em, first-line-indent: 1em)
         #set text(inputFontSize)
         #children
       ]
@@ -444,23 +450,85 @@
   )
 }
 
-#let 本人希望(height: 5cm, children) = {
+#let 志望動機(height: 5cm, children) = 自由記述欄(description: "志望の動機", height: height, children)
+
+#let 自己PR(height: 5cm, children) = 自由記述欄(description: "自己PR・その他アピールしたいこと", height: height, children)
+
+#let 事務事項欄(height: 2.2cm, 最寄り駅: "", 扶養家族人数: 0, 配偶者の有無: false, 配偶者の扶養義務: false) = {
+  let 有無情報(bool) = {
+    let 有りの丸 = if bool { color.black }  else { color.white }
+    let 無しの丸 = if bool { color.white }  else { color.black }
+
+    align(center, text(size: nameFontSize)[
+      #grid(
+        columns: (1fr, 1fr),
+        circle(stroke: 有りの丸, inset: 1pt)[
+          #set align(center + horizon)
+          有
+        ],
+        circle(stroke: 無しの丸, inset: 1pt)[
+          #set align(center + horizon)
+          無
+        ],
+      )
+    ])
+  }
+
   stack(
-    rect(
-      stroke: (
-        bottom: 1.5pt,
-        top: 1.5pt,
-        left: 1.5pt,
-        right: 1.5pt
+    grid(
+      columns: (1fr, 1fr, 1fr, 1fr),
+      rect(
+        stroke: (bottom: 1.5pt, top: 1.5pt, left: 1.5pt, right: 0.5pt),
+        width: 100%,
+        height: height,
+        [
+          #align(center,[最寄り駅])
+          #pad(
+            y: 0.1cm,
+            align(center, text(size: inputFontSize + 4pt)[
+              #最寄り駅
+            ])
+          )
+        ]
       ),
-      height: height,
-      width: 100%,
-      [
-        本人希望記入欄(特に給料・職種・勤務時間・勤務地・その他についての希望があれば記入)
-        #linebreak()
-        #set text(inputFontSize)
-        #children
-      ]
-    )
+      rect(
+        stroke: (bottom: 1.5pt, top: 1.5pt, left: none, right: 0.5pt),
+        width: 100%,
+        height: height,
+        [
+          #align(center,[扶養家族数(配偶者を除く)])
+          #pad(
+            y: 0.35cm,
+            align(center, text(size: nameFontSize)[
+              #扶養家族人数 人
+            ])
+          )
+        ]
+      ),
+      rect(
+        stroke: (bottom: 1.5pt, top: 1.5pt, left: 0.5pt, right: 0.5pt),
+        width: 100%,
+        height: height,
+        [
+          #align(center,[配偶者])
+          #pad(
+            y: 0.1cm,
+            有無情報(配偶者の有無)
+          )
+        ]
+      ),
+      rect(
+        stroke: (bottom: 1.5pt, top: 1.5pt, left: none, right: 1.5pt),
+        width: 100%,
+        height: height,
+        [
+          #align(center,[配偶者の扶養義務])
+          #pad(
+            y: 0.1cm,
+            有無情報(配偶者の扶養義務)
+          )
+        ]
+      ),
+    ),
   )
 }

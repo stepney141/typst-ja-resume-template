@@ -112,11 +112,19 @@
   ),
   linebreak(),
   志望動機(
+    height: 4cm,
     [私がこの職に応募する理由は、]
   ),
   linebreak(),
-  本人希望(
-    [私は〇〇がしたい]
+  自己PR(
+    height: 4cm,
+    [私は〇〇ができる]
+  ),
+  linebreak(),
+  事務事項欄(
+    最寄り駅: "JR山手線\n東京駅",
+    配偶者の有無: true,
+    配偶者の扶養義務: false,
   ),
   place(
     bottom + right,
